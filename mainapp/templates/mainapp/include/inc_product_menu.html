@@ -1,0 +1,10 @@
+<!-- Меню выбора продуктов. По умолчанию выбраны Все -->
+<div class="links clearfix">
+    <ul class="links-menu">
+        {% for menu in product_menu %}
+        <li><a href="{% url menu.href %}" {% if request.resolver_match.url_name == menu.href or request.resolver_match.url_name == 'products' and menu == product_menu.0 %}class="active"{% endif %}>
+            {{menu.name}}
+        </a></li>
+        {% endfor %}
+    </ul>
+</div>

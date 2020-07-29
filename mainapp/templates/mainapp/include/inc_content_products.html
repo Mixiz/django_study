@@ -1,0 +1,13 @@
+<!-- Плитка с товарами -->
+{% load static %}
+{% for item in products %}
+<div class="block">
+    <a href="#"><img src="{% static item.img_src %}" alt="">
+        <div class="text">
+            <img src="{% static 'img/icon-hover.png' %}" alt="img">
+            <h4>{{item.header}}</h4>
+            <p>{{item.desc}}</p>
+        </div>
+    </a>
+</div>
+{% endfor %}

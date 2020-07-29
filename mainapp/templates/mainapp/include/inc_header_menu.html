@@ -1,0 +1,13 @@
+<!-- Меню навигации в хедере -->
+<div class="header clearfix">
+    <a href="/" class="logo"></a>
+    <ul class="menu">
+        {% for menu in header_menu %}
+        <li><a href="{% url menu.href %}" {% if request.resolver_match.url_name == menu.href %}class="active"{% endif %}>
+            {{menu.name}}
+        </a></li>
+        {% endfor %}
+    </ul>
+    <a href="#" class="search"></a>
+    <a href="#" class="basket"></a>
+</div>

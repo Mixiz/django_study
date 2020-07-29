@@ -1,0 +1,5 @@
+[
+  {"location": "Москва", "phone": "+7-777-777-7777", "email": "info7@geekshop.ru", "address": "В пределах МКАД"},
+  {"location": "Москва", "phone": "+7-888-888-8888", "email": "info8@geekshop.ru", "address": "В пределах МКАД"},
+  {"location": "Москва", "phone": "+7-999-999-9999", "email": "info9@geekshop.ru", "address": "В пределах МКАД"}
+]
