@@ -76,7 +76,7 @@ def contact(request):
         #{'location': 'Москва', 'phone': '+7-888-888-8888', 'email': 'info@geekshop.ru', 'address': 'В пределах МКАД'},
     ]
 
-    with open(os.path.join(BASE_DIR, 'mainapp\json_data\contacts')) as f:
+    with open(os.path.join(BASE_DIR, 'mainapp/json_data/contacts'), encoding="utf-8") as f:
         data = f.read();
 
     contacts = json.loads(data)
