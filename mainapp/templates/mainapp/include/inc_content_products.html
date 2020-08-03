@@ -2,10 +2,10 @@
 {% load static %}
 {% for item in products %}
 <div class="block">
-    <a href="#"><img src="{% static item.img_src %}" alt="">
+    <a href="#"><img class="{{img_class}}" src="/media/{{ item.img_src }}" alt="">
         <div class="text">
             <img src="{% static 'img/icon-hover.png' %}" alt="img">
-            <h4>{{item.header}}</h4>
+            <h4>{{item.name}}</h4>
             <p>{{item.desc}}</p>
         </div>
     </a>
