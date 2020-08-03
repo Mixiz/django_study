@@ -838,6 +838,16 @@ td:first-child {
 	display: block;
 }
 
+.img-product-270{
+    height: 270px;
+    width: 270px;
+}
+
+.img-product-370{
+    height: 370px;
+    width: 370px;
+}
+
 .loading {
 	text-align: center;
 	margin-bottom: 140px;
@@ -904,6 +914,12 @@ td:first-child {
 	width: 570px;
 	height: 570px;
 }
+
+.slider-product img {
+	width: 570px;
+	height: 570px;
+}
+
 .slider-control {
 	width: 420px;
 	height: 70px;

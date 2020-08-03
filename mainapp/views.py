@@ -1,7 +1,6 @@
 from django.shortcuts import render
-from django_study.settings import BASE_DIR
-import os
-import json
+from django.urls import resolve
+from mainapp.models import Product, ProductCategory, Contact
 
 
 header_menu = [
@@ -13,21 +12,13 @@ header_menu = [
 
 # Главная страница
 def main(request):
-    products = [
-        {'img_src': 'img/product-1.jpg',
-         'header': 'Отличный стул',
-         'desc': 'Расположитесь комфортно.'
-        },
-        {'img_src': 'img/product-2.jpg',
-         'header': 'Стул повышенного качества',
-         'desc': 'Не оторваться.'
-        },
-    ]
+    products = Product.objects.all().order_by('?')[:3]
 
     context = {
         'title': 'магазин - главная',
         'header_menu': header_menu,
         'products': products,
+        'img_class': "img-product-270",
     }
 
     return render(request, 'mainapp/index.html', context)
@@ -35,34 +26,30 @@ def main(request):
 
 # Страница с продуктами
 def products(request):
+    # Формируем заголовок с категориями
     product_menu = [
         {'href': 'pr_all', 'name': 'все'},
-        {'href': 'pr_home', 'name': 'дом'},
-        {'href': 'pr_office', 'name': 'офис'},
-        {'href': 'pr_modern', 'name': 'модерн'},
-        {'href': 'pr_classic', 'name': 'классика'},
     ]
+    product_menu += ProductCategory.objects.all()
 
-    products = [
-        {'img_src': 'img/product-11.jpg',
-         'header': 'Стул повышенного качества',
-         'desc': 'Не оторваться.'
-        },
-        {'img_src': 'img/product-21.jpg',
-         'header': 'Стул повышенного качества',
-         'desc': 'Не оторваться.'
-        },
-        {'img_src': 'img/product-31.jpg',
-         'header': 'Стул повышенного качества',
-         'desc': 'Не оторваться.'
-        },
-    ]
+    # Получаем список продуктов для отображения
+    current_url = resolve(request.path_info).url_name
+    category = ProductCategory.objects.filter(href=current_url)
+
+    if category.count():
+        products = Product.objects.all().order_by('?').filter(category_id=getattr(category.first(), 'id'))[:3]
+        product = Product.objects.all().order_by('?').filter(category_id=getattr(category.first(), 'id'))[:1].first()
+    else:
+        products = Product.objects.all().order_by('?')[:3]
+        product = Product.objects.all().order_by('?')[:1].first()
 
     context = {
         'title': 'магазин - продукты',
         'header_menu': header_menu,
         'product_menu': product_menu,
         'products': products,
+        'product': product,
+        'img_class': "img-product-370",
     }
 
     return render(request, 'mainapp/products.html', context)
@@ -70,16 +57,7 @@ def products(request):
 
 # Контакты
 def contact(request):
-    contacts = [
-        #{'location': 'Москва', 'phone': '+7-888-888-8888', 'email': 'info@geekshop.ru', 'address': 'В пределах МКАД'},
-        #{'location': 'Москва', 'phone': '+7-888-888-8888', 'email': 'info@geekshop.ru', 'address': 'В пределах МКАД'},
-        #{'location': 'Москва', 'phone': '+7-888-888-8888', 'email': 'info@geekshop.ru', 'address': 'В пределах МКАД'},
-    ]
-
-    with open(os.path.join(BASE_DIR, 'mainapp/json_data/contacts'), encoding="utf-8") as f:
-        data = f.read();
-
-    contacts = json.loads(data)
+    contacts = Contact.objects.all()[:4]
 
     context = {
         'title': 'магазин - контакты',
