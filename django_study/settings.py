@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp',
+    'authapp',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 FIXTURE_DIRS = [
     os.path.join(BASE_DIR, 'mainapp/migrations/scripts')
 ]
+
+AUTH_USER_MODEL = 'authapp.ShopUser'
