@@ -10,9 +10,12 @@
     {% block header_files %}
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'fonts/font-awesome/css/font-awesome.css' %}">
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/basket.js' %}"></script>
     {% endblock %}
 </head>
 <body>
+    <div id="alert_message">test</div>
     <div class="container">
 
         {% block header %}

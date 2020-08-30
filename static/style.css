@@ -12,6 +12,16 @@ html, body {
 	height: 100%;
 }
 
+#alert_message {
+    position: absolute;
+    left: 50%;
+    top: 200px;
+    padding: 15px;
+    border-radius: 10px;
+    display: none;
+    background-color: #f0f0f0;
+}
+
 .clr {
 	height: 384px;
 }
@@ -99,6 +109,14 @@ html, body {
     padding-top: 10px;
     font-size: 1.25em;
     font-weight: 600;
+}
+
+.basket_add, .basket_remove{
+    width: 30px;
+    padding-right: 5px;
+    font-size: 1.25em;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .auth {
@@ -983,7 +1001,7 @@ td:first-child {
 	font-weight: 700;
 	text-align: center;
 	margin-top: 47px;
-	margin-bottom: 0px;
+	margin-bottom: 23px;
 }
 .description .red {
 	text-transform: uppercase;
@@ -993,7 +1011,7 @@ td:first-child {
 	text-align: center;
 	letter-spacing: 1px;
 	line-height: 17px;
-	margin-top: 23px;
+	/*margin-top: 23px;*/
 	margin-bottom: 36px;
 }
 .description .price {

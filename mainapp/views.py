@@ -7,6 +7,7 @@ header_menu = [
     {'href': 'main', 'name': 'домой'},
     {'href': 'products', 'name': 'продукты'},
     {'href': 'contact', 'name': 'контакты'},
+    {'href': 'authapp:edit', 'name': 'пользователь', 'need_auth': True},
 ]
 
 
@@ -38,14 +39,19 @@ def products(request, pk=None):
 
     if pk is not None:
         product = get_object_or_404(Product, pk=pk)
+        show_hot_product = False
     else:
         product = None
+        show_hot_product = True
 
+    # Выбираем товары для вывода
     if category.count():
+        # Три случайных продукта определенной категории
         if product is None:
             product = Product.objects.all().order_by('?').filter(category_id=getattr(category.first(), 'id'))[:1].first()
         products = Product.objects.exclude(pk=product.pk).order_by('?').filter(category_id=getattr(category.first(), 'id'))[:3]
     else:
+        # Три случайных продукта любой категории
         if product is None:
             product = Product.objects.all().order_by('?')[:1].first()
         products = Product.objects.exclude(pk=product.pk).order_by('?')[:3]
@@ -57,6 +63,7 @@ def products(request, pk=None):
         'products': products,
         'product': product,
         'img_class': "img-product-370",
+        'show_hot_product': show_hot_product,
     }
 
     return render(request, 'mainapp/products.html', context)

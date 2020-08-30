@@ -11,7 +11,7 @@ def get_basket_count(request):
     if request.user.is_authenticated:
         order = Order.objects.filter(user=request.user, status=ORDER_START)
         if order.count():
-            count = OrderPosition.objects.filter(order=order.first()).count()
+            count = order.first().order_count
     return count
 
 
@@ -26,5 +26,5 @@ def get_basket_price(request):
             price = order.first().total
     if price > 0:
         # Используем неразрывный пробел, чтобы отобразилось в одну строку
-        price = f'{price}\xa0руб.'
+        price = f'{price:.2f}\xa0руб.'
     return price

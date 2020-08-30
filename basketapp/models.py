@@ -25,6 +25,13 @@ class Order(models.Model):
     def __str__(self):
         return f'Заказ №{self.pk} пользователя {self.user.username} в статусе "{dict(ORDER_STATUSES)[self.status]}"'
 
+    # Количество единиц товара в заказе
+    @property
+    def order_count(self):
+        order_positions = OrderPosition.objects.filter(order=self)
+        count = sum(list(map(lambda x: x.quantity, order_positions)))
+        return count
+
 
 # Позиция заказа
 class OrderPosition(models.Model):
@@ -32,6 +39,7 @@ class OrderPosition(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
     quantity = models.PositiveSmallIntegerField(default=0, verbose_name='Количество')
 
+    @property
     def line_total(self):
         return self.quantity * self.product.price
 
