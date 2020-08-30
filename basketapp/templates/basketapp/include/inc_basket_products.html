@@ -1,0 +1,30 @@
+<!-- Плитка с товарами в корзине -->
+{% load static %}
+<div class="block">
+    <div class="text">
+        {{ order }}
+    </div>
+</div>
+<br>
+<div class="block">
+    <table>
+        <tr>
+            <td><h4>Название продукта</h4></td>
+            <td><h4>Количество</h4></td>
+            <td><h4>Цена за единицу</h4></td>
+            <td><h4>Стоимость</h4></td>
+            <td></td>
+        <tr><td colspan="5"><hr>
+    {% for item in order_positions %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }} шт.</td>
+            <td>{{ item.product.price }} руб.</td>
+            <td>{{ item.line_total }} руб.</td>
+            <td><a href="{% url 'basketapp:remove' item.product.pk %}">Удалить</a></td>
+    {% endfor %}
+        <tr class="basket_total"><td colspan="3">
+            <td>Итого
+            <td> {{ order.total }} руб.
+    </table>
+</div>

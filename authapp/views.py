@@ -64,4 +64,5 @@ def edit(request):
 
 def logout(request):
     auth.logout(request)
+    print(reverse('main'))
     return HttpResponseRedirect(reverse('main'))

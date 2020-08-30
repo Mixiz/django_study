@@ -25,13 +25,21 @@ urlpatterns = [
 
     path('auth/', include('authapp.urls', namespace='auth')),
 
+    path('basket/', include('basketapp.urls', namespace='basket')),
+
     path('', mainapp.main, name='main'),
 
-    path('products/',               mainapp.products, name='products'),
-    path('products/pr_all/',        mainapp.products, name='pr_all'),
-    path('products/pr_chair/',      mainapp.products, name='pr_chair'),
-    path('products/pr_armchair/',   mainapp.products, name='pr_armchair'),
-    path('products/pr_divan/',      mainapp.products, name='pr_divan'),
+    #path('products/', include('mainapp.urls', namespace='products')),
+    path('products/',                       mainapp.products, name='products'),
+    path('products/<int:pk>',               mainapp.products, name='products'),
+    path('products/pr_all/',                mainapp.products, name='pr_all'),
+    path('products/pr_all/<int:pk>',        mainapp.products, name='pr_all'),
+    path('products/pr_chair/',              mainapp.products, name='pr_chair'),
+    path('products/pr_chair/<int:pk>',      mainapp.products, name='pr_chair'),
+    path('products/pr_armchair/',           mainapp.products, name='pr_armchair'),
+    path('products/pr_armchair/<int:pk>',   mainapp.products, name='pr_armchair'),
+    path('products/pr_divan/',              mainapp.products, name='pr_divan'),
+    path('products/pr_divan/<int:pk>',      mainapp.products, name='pr_divan'),
 
     path('contact/', mainapp.contact, name='contact'),
 ]
