@@ -4,13 +4,15 @@
     <a href="/" class="logo"></a>
     <ul class="menu">
         {% for menu in header_menu %}
-        <li><a href="{% url menu.href %}" {% if request.resolver_match.url_name == menu.href %}class="active"{% endif %}>
-            {{menu.name}}
-        </a></li>
+            {% if not menu.need_auth or request.user.is_authenticated %}
+                <li><a href="{% url menu.href %}" {% if request.resolver_match.url_name == menu.href %}class="active"{% endif %}>
+                    {{menu.name}}
+                </a></li>
+            {% endif %}
         {% endfor %}
     </ul>
     <a href="#" class="search"></a>
-    {% if request.user.is_authenticated %}<a href="/basket/" class="basket"><span>{% get_basket_count request %}</span><span>{% get_basket_price request %}</span></a>{% endif %}
+    {% if request.user.is_authenticated %}<a href="/basket/" class="basket"><span>{% get_basket_count request %}</span><span id="total">{% get_basket_price request %}</span></a>{% endif %}
     <a href="{% if request.user.is_authenticated %}/auth/logout{% else %}/auth/login{% endif %}" class="auth">
         {% if request.user.is_authenticated %}Выйти{% else %}Войти{% endif %}
     </a>

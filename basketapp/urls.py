@@ -8,5 +8,6 @@ urlpatterns = [
     path('', basketapp.view, name='view'),
     path('add/<int:pk>', basketapp.add, name='add'),
     path('remove/<int:pk>', basketapp.remove, name='remove'),
+    path('delete/<int:pk>', basketapp.delete, name='delete'),
     path('move/', basketapp.move, name='move'),
 ]

@@ -1,10 +1,15 @@
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.core import serializers
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
+
 from basketapp.models import Order, ORDER_START, OrderPosition
 from mainapp.models import Product
 
 
 # Create your views here.
+@login_required
 def view(request):
     order = Order.objects.filter(user=request.user, status=ORDER_START)
     if order.count():
@@ -22,7 +27,12 @@ def view(request):
     return render(request, 'basketapp/basket.html', context)
 
 
+@login_required
 def add(request, pk):
+    # Если попробовали добавить в корзину до авторизации, то было перенаправление
+    if 'login' in request.META.get('HTTP_REFERER'):
+        return HttpResponseRedirect(reverse('products', args=[pk]))
+
     product = get_object_or_404(Product, pk=pk)
     order = Order.objects.filter(user=request.user, status=ORDER_START)
 
@@ -55,10 +65,19 @@ def add(request, pk):
         'order_positions': order_positions
     }
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    if request.is_ajax():
+        result = {
+            'quantity': order_position.quantity,
+            'total': order_position.quantity * order_position.product.price,
+            'message': 'Товар успешно добавлен',
+        }
+        return JsonResponse({'result': result, 'total': order.total})
+    else:
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 # Убрать товар из заказа
+@login_required
 def remove(request, pk):
     product = get_object_or_404(Product, pk=pk)
     order_position = get_object_or_404(OrderPosition, product=product)
@@ -73,10 +92,32 @@ def remove(request, pk):
     else:
         order_position.delete()
 
+    if request.is_ajax():
+        result = {
+            'quantity': order_position.quantity,
+            'total': order_position.quantity * order_position.product.price,
+            'message': 'Товар успешно убран',
+        }
+        return JsonResponse({'result': result, 'total': order.total})
+    else:
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+# Полностью убирает товарную позицию из заказа
+@login_required
+def delete(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    order_position = get_object_or_404(OrderPosition, product=product)
+    order = get_object_or_404(Order, id=order_position.order.id, user=request.user)
+
+    order.total -= order_position.quantity * order_position.product.price
+    order_position.delete()
+    order.save()
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
 # Движение заявки по шагам
+@login_required
 def move(request):
     order = get_object_or_404(Order, user=request.user, status=ORDER_START)
 
