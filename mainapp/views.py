@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import resolve
 from mainapp.models import Product, ProductCategory, Contact
 
@@ -25,7 +25,7 @@ def main(request):
 
 
 # Страница с продуктами
-def products(request):
+def products(request, pk=None):
     # Формируем заголовок с категориями
     product_menu = [
         {'href': 'pr_all', 'name': 'все'},
@@ -36,12 +36,19 @@ def products(request):
     current_url = resolve(request.path_info).url_name
     category = ProductCategory.objects.filter(href=current_url)
 
-    if category.count():
-        products = Product.objects.all().order_by('?').filter(category_id=getattr(category.first(), 'id'))[:3]
-        product = Product.objects.all().order_by('?').filter(category_id=getattr(category.first(), 'id'))[:1].first()
+    if pk is not None:
+        product = get_object_or_404(Product, pk=pk)
     else:
-        products = Product.objects.all().order_by('?')[:3]
-        product = Product.objects.all().order_by('?')[:1].first()
+        product = None
+
+    if category.count():
+        if product is None:
+            product = Product.objects.all().order_by('?').filter(category_id=getattr(category.first(), 'id'))[:1].first()
+        products = Product.objects.exclude(pk=product.pk).order_by('?').filter(category_id=getattr(category.first(), 'id'))[:3]
+    else:
+        if product is None:
+            product = Product.objects.all().order_by('?')[:1].first()
+        products = Product.objects.exclude(pk=product.pk).order_by('?')[:3]
 
     context = {
         'title': 'магазин - продукты',
